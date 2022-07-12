@@ -13,6 +13,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 
 app.use('/api/v1', require('./routes/hallRoutes'))
+app.use('/api/v1', require('./routes/bookingRoutes'))
 
 app.use(errorHandler)
 
