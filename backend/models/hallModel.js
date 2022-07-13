@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const GeoJSON = require('mongoose-geojson-schema');
 
 const hallSchema = new mongoose.Schema({
     name: {
@@ -6,17 +7,7 @@ const hallSchema = new mongoose.Schema({
         required: [true, 'Please add a name for the hall']
     },
     address: {
-        location: {
-            type: {
-              type: String, // Don't do `{ location: { type: String } }`
-              enum: ['Point'], // 'location.type' must be 'Point'
-              required: true
-            },
-            coordinates: {
-              type: [Number],
-              required: true
-            }
-        },
+        location: mongoose.Schema.Types.Point,
         city: {
             type: String,
             required: [true, 'Please enter the city where the hall is located']

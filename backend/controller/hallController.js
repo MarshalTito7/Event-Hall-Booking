@@ -2,8 +2,7 @@ const asyncHandler = require('express-async-handler')
 
 const Hall = require('../models/hallModel')
 
-// @desc    Get goals
-// @route   GET /api/goals
+// @desc    Get halls
 // @access  Private
 const getHalls = asyncHandler(async (req,res) => {
     const halls = await Hall.find()
@@ -16,8 +15,7 @@ const getSingleHalls = asyncHandler(async (req,res) => {
     res.status(200).json({message: "Get One Hall"})
 })
 
-// @desc    Set goals
-// @route   POST /api/goals
+// @desc    Set halls
 // @access  Private
 const setHall = asyncHandler(async (req,res) => {
     // if (!req.body.text) {
@@ -25,15 +23,27 @@ const setHall = asyncHandler(async (req,res) => {
     //     throw new Error('Please add a text field')
     // }
 
-    // const goal = await Goal.create({
-    //     text: req.body.text
-    // })
+    const hall = await Hall.create({
+        name: req.body.name,
+        address: {
+            location: {
+                type: "Point",
+                coordinates: [23.206504, 88.436259]
+                // coordinates: [req.body.coordinates]
+            },
+            city: req.body.city,
+            readableadd: req.body.readableadd,
+            pin: req.body.pin
+        },
+        rate: req.body.rate,
+        advcanceamt: req.body.advcanceamt,
+        cancellable: req.body.cancellable
+    })
 
-    res.status(200).json({message: "Add Hall"})
+    res.status(200).json(hall)
 })
 
-// @desc    Update goal
-// @route   PUT /api/goals/:id
+// @desc    Update hall
 // @access  Private
 const updateHall = asyncHandler(async (req,res) => {
     // const goal = await Goal.findById(req.params.id)
@@ -51,8 +61,7 @@ const updateHall = asyncHandler(async (req,res) => {
     res.status(200).json({message: "Update Hall"})
 })
 
-// @desc    Delete goal
-// @route   DELETE /api/goals/:id
+// @desc    Search for a nearby hall
 // @access  Private
 const searchLoc = asyncHandler(async (req,res) => {
 
