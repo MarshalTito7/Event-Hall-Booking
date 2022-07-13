@@ -43,19 +43,19 @@ const setHall = asyncHandler(async (req,res) => {
 // @desc    Update hall
 // @access  Private
 const updateHall = asyncHandler(async (req,res) => {
-    // const goal = await Goal.findById(req.params.id)
+    const hall = await Hall.findById(req.params.id)
 
-    // if (!goal) {
-    //     res.status(400)
-    //     throw new Error('Goal not found')
-    // }
+    if (!hall) {
+        res.status(400)
+        throw new Error('Hall not found')
+    }
 
-    // const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
-    //     new : true
-    //     // This creates a new object if the object does not exist
-    // })
+    const updatedHall = await Hall.findByIdAndUpdate(req.params.id, req.body, {
+        new : true
+        // This creates a new object if the object does not exist
+    })
 
-    res.status(200).json({message: "Update Hall"})
+    res.status(200).json(updatedHall)
 })
 
 // @desc    Search for a nearby hall
