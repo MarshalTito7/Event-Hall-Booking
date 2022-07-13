@@ -11,17 +11,14 @@ const getHalls = asyncHandler(async (req,res) => {
 })
 
 const getSingleHalls = asyncHandler(async (req,res) => {
+    const hall = await Hall.findById(req.params.id)
 
-    res.status(200).json({message: "Get One Hall"})
+    res.status(200).json(hall)
 })
 
 // @desc    Set halls
 // @access  Private
 const setHall = asyncHandler(async (req,res) => {
-    // if (!req.body.text) {
-    //     res.status(400)
-    //     throw new Error('Please add a text field')
-    // }
 
     const hall = await Hall.create({
         name: req.body.name,
