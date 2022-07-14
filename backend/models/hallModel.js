@@ -1,26 +1,36 @@
 const mongoose = require('mongoose')
-const GeoJSON = require('mongoose-geojson-schema');
+const geocoder = require('../utils/geocoder');
 
 const hallSchema = new mongoose.Schema({
+    hallId: {
+        type: String,
+        required: [true, 'Please add a store ID'],
+        unique: true,
+        trim: true,
+        maxlength: [10, 'Store ID must be less than 10 characters']
+        
+    },
     name: {
         type: String,
         required: [true, 'Please add a name for the hall']
     },
-    address: {
-        location: mongoose.Schema.Types.Point,
-        city: {
-            type: String,
-            required: [true, 'Please enter the city where the hall is located']
+    address : {
+        type: String,
+        required: [true, 'Please add an address']
+    },
+    location: {
+        type: {
+            type: String, // Don't do `{ location: { type: String } }`
+            enum: ['Point'], // 'location.type' must be 'Point'
+            
         },
-        readableadd: {
-            type: String
+        coordinates: {
+        type: [Number],
+        index: '2dsphere'
         },
-        pin: {
-            type: Number,
-            required: [true, 'Please enter the area PIN Code'],
-            // Can we specify the length?
-
-        }
+        formattedAddress: String,
+        city: String,
+        pin: Number
     },
     rate: {
         type: Number,
@@ -36,6 +46,21 @@ const hallSchema = new mongoose.Schema({
     }
 }, {
     timestamps: true,
+})
+
+hallSchema.pre('save',async function(next){
+    const loc = await geocoder.geocode(this.address);
+    this.location = {
+        type: 'Point',
+        coordinates: [loc[0].longitude, loc[0].latitude],
+        formattedAddress: loc[0].formattedAddress,
+        city: loc[0].city,
+        pin: loc[0].zipcode
+    }
+
+    // Do not save the address
+    this.address = undefined
+    next()
 })
 
 module.exports = mongoose.model('hallData',hallSchema)

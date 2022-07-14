@@ -20,24 +20,23 @@ const getSingleHalls = asyncHandler(async (req,res) => {
 // @access  Private
 const setHall = asyncHandler(async (req,res) => {
 
-    const hall = await Hall.create({
-        name: req.body.name,
-        address: {
-            location: {
-                type: "Point",
-                coordinates: [23.206504, 88.436259]
-                // coordinates: [req.body.coordinates]
-            },
-            city: req.body.city,
-            readableadd: req.body.readableadd,
-            pin: req.body.pin
-        },
-        rate: req.body.rate,
-        advcanceamt: req.body.advcanceamt,
-        cancellable: req.body.cancellable
-    })
-
-    res.status(200).json(hall)
+    try{
+        const hall = await Hall.create(req.body);
+        
+        return res.status(200).json({
+            success: true,
+            data: hall
+        })
+    }
+    catch(err){
+        console.error(err);
+        if(err.code === 1100){
+            return res.status(400).json({ error: 'This hall already exists'  })
+        }
+        res.status(500).json({
+            error: 'Server error'
+        });
+    }
 })
 
 // @desc    Update hall
