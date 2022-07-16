@@ -10,6 +10,8 @@ const{
 
 router.route('/eventhall').post(setHall)
 
+router.route('/eventhall/search').get(searchLoc)
+
 router.route('/eventhalls').get(getHalls)
 
 router.route('/eventhall/:id').put(updateHall).get(getSingleHalls)

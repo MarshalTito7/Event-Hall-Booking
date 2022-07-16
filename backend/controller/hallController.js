@@ -61,7 +61,17 @@ const updateHall = asyncHandler(async (req,res) => {
 // @access  Private
 const searchLoc = asyncHandler(async (req,res) => {
 
-    res.status(200).json({message: "Search for nearby Location"})
+    const halls = await Hall.find({location:
+        { $near:
+           {
+             $geometry: req.body.loc,
+             $minDistance: req.body.min,
+             $maxDistance: req.body.max
+           }
+        }
+    })
+
+    res.status(200).json(halls)
 })
 
 module.exports = {
