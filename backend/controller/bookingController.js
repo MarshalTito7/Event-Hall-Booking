@@ -22,12 +22,43 @@ const getSingleBooking = asyncHandler(async (req,res) => {
 // @access  Private
 const setBooking = asyncHandler(async (req,res) => {
     try{
-        const booking = await Booking.create(req.body);
-        
-        return res.status(200).json({
-            success: true,
-            data: booking
-        })
+        const bookings = await Booking.find(
+            {
+                $and: [
+                    {
+                        hallId: req.body.hallId
+                    },
+                    {
+                        $or:[
+                            {
+                                startDate:{
+                                    $gte:new Date(req.body.startDate),
+                                    $lte: new Date(req.body.endDate)
+                                }
+                            },
+                            {
+                                endDate:{
+                                    $gte:new Date(req.body.startDate),
+                                    $lte: new Date(req.body.endDate)
+                                }
+                            }
+                        ]
+                    }
+                ]
+            }
+        )
+        if(bookings.length == 0)
+        {
+            const booking = await Booking.create(req.body);
+            
+            return res.status(200).json({
+                success: true,
+                data: booking
+            })
+        }
+        else{
+            return res.status(400).json({ error: `The hall ${req.body.hallId} for the selected date is already booked`  })
+        }
     }
     catch(err){
         console.error(err);
