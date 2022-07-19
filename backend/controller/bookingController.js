@@ -81,13 +81,43 @@ const updateBooking = asyncHandler(async (req,res) => {
         res.status(400)
         throw new Error('Booking not found')
     }
+    const bookings = await Booking.find(
+        {
+            $and: [
+                {
+                    hallId: req.body.hallId
+                },
+                {
+                    $or:[
+                        {
+                            startDate:{
+                                $gte:new Date(req.body.startDate),
+                                $lte: new Date(req.body.endDate)
+                            }
+                        },
+                        {
+                            endDate:{
+                                $gte:new Date(req.body.startDate),
+                                $lte: new Date(req.body.endDate)
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    )
+    if(bookings.length == 0){
+        const updatedBooking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
+            new : true
+            // This creates a new object if the object does not exist
+        })    
+        res.status(200).json(updatedBooking)
+    }
+    else{
+        return res.status(400).json({ error: `Booking cannot be updated because the hall ${req.body.hallId} for the selected date is already booked`  })
+    }
 
-    const updatedBooking = await Booking.findByIdAndUpdate(req.params.id, req.body, {
-        new : true
-        // This creates a new object if the object does not exist
-    })
 
-    res.status(200).json(updatedBooking)
 })
 
 
