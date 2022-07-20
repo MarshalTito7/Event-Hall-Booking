@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler')
 
 const Booking = require('../models/bookingModel')
+const Hall = require('../models/hallModel')
 
 // @desc    Get goals
 // @route   GET /api/goals
@@ -120,10 +121,42 @@ const updateBooking = asyncHandler(async (req,res) => {
 
 })
 
+const cancelBooking = asyncHandler(async (req,res) => {
+    const booking = await Booking.findById(req.params.id)
+
+    const hall = await Hall.find({
+        hallId: req.body.hallId
+    },
+    {
+        cancellable: 1,
+        name: 1  
+    })
+
+    if (!booking) {
+        res.status(400)
+        throw new Error('Booking not found')
+    }
+
+    if (hall[0].cancellable === true) {
+        await booking.remove()
+
+        res.status(200).json({
+            id: req.params.id,
+            success: true,
+            data: 'Booking successfully cancelled'
+        })
+    }
+    else if(hall[0].cancellable === false){
+        return res.status(400).json({ error: `Booking cannot be deleted because the hall ${hall[0].name} is not cancellable`  })
+    }
+
+})
+
 
 module.exports = {
     getBookings,
     getSingleBooking,
     setBooking,
-    updateBooking
+    updateBooking,
+    cancelBooking
 }
