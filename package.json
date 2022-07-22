@@ -17,7 +17,9 @@
     "express-async-handler": "^1.2.0",
     "mongoose": "^6.4.4",
     "mongoose-geojson-schema": "^2.2.2",
-    "node-geocoder": "^4.2.0"
+    "node-geocoder": "^4.2.0",
+    "swagger-jsdoc": "^6.2.1",
+    "swagger-ui-express": "^4.5.0"
   },
   "optionalDependencies": {
     "nodemon": "^2.0.19"
