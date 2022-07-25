@@ -70,94 +70,86 @@
     },
     "paths" : {
         "/eventhall" : {
-        "post": {
-            "tags": [
-              "Event Hall"
-            ],
-            "summary": "Add the event halls",
-            "description": "",
-            "operationId": "setHall",
-            "consumes": [
-              "application/json"
-            ],
-            "produces": [
-              "application/json"
-            ],
-            "parameters": [
-                {
-                  "in": "body",
-                  "name": "body",
-                  "description": "Event Hall that needs to be added to the hall owner",
-                  "required": true,
-                  "schema": {
-                    "$ref": "#/schema/Halls"
+            "post": {
+                "tags": [
+                    "Event Hall"
+                ],
+                "summary": "Add the event halls",
+                "description": "",
+                "operationId": "setHall",
+                "consumes": [
+                "application/json"
+                ],
+                "produces": [
+                "application/json"
+                ],
+                "parameters": [
+                    {
+                    "in": "body",
+                    "name": "body",
+                    "description": "Event Hall that needs to be added to the hall owner",
+                    "required": true,
+                    "schema": {
+                        "$ref": "#/schema/Halls"
+                    }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This hall already exists"
+                    },
+                    "500" : {
+                        "description": "Server error"
+                    },
+                    "200" : {
+                        "description": "successful operation"
+                    }
+                }
+            } 
+        },
+        "/eventhall/:id" : {
+            "put": {
+                "tags": [
+                  "Event Hall"
+                ],
+                "summary": "Update an existing hall",
+                "description": "",
+                "operationId": "updateHall",
+                "consumes": [
+                  "application/json"
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                  {
+                    "in": "body",
+                    "name": "body",
+                    "description": "Event Hall that needs to be updated to the hall owner",
+                    "required": true,
+                    "schema": {
+                      "$ref": "#/schema/Halls"
+                    }
+                  }
+                ],
+                "responses": {
+                  "400": {
+                    "description": "Hall not found"
+                  },
+                  "200" : {
+                    "description": "successful operation"
                   }
                 }
-            ],
-            "responses": {
-              "400": {
-                "description": "This hall already exists"
-              },
-              "500" : {
-                "description": "Server error"
-              }
             }
-        } },
+
+        },
         "/todo" : {
-            "post" : {
+            "get" : {
                 "summary" : "Save the task",
                 "description": "Save the task",
                 "produces": ["application/json"],
                 "consumes": ["application/json"],
                 "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "task object",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "task" : {
-                                    "type": "object",
-                                    "$ref": "#/definitions/Task"
-                                } 
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/todosResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
-                    }
-                }
-            }
-        },
-        "/todos/{id}" : {
-            "put" : {
-                "summary" : "Update the tasks",
-                "description": "Update the tasks",
-                "produces": ["application/json"],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "task id that needs to be deleted",
-                        "required": true,
-                        "type": "string"
-                    },
                     {
                         "in": "body",
                         "name": "body",
