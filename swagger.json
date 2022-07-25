@@ -12,6 +12,53 @@
             "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
         }
     },
+    "schema" : {
+        "Halls" : {
+            "type": "object",
+            "properties" : {
+                "hallId" : {
+                "type": "string",
+                "required": true,
+                "unique": true,
+                "trim": true,
+                "maxlength": 10
+                
+                },
+                "name": {
+                    "type": "string",
+                    "required": true
+                },
+                "address" : {
+                    "type": "string",
+                    "required": true
+                },
+                "location": {
+                
+                    "type": "string", 
+                    "enum": ["point"],
+                    "coordinates": {
+                    "type": ["number"],
+                    "index": "2dsphere"
+                    },
+                    "formattedAddress": "string",
+                    "city": "string",
+                    "pin": "number"
+                },
+                "rate": {
+                    "type": "number",
+                    "required": "[true, 'Please add the rate for the hall']"
+                },
+                "advcanceamt": {
+                    "type": "number",
+                    "required": "[true, 'Please add the advance amount required for booking the hall']"
+                },
+                "cancellable": {
+                    "type": "boolean",
+                    "required": "[true, 'Please select an option']"
+                }
+            }
+        }
+    },
     "schemes": ["http","https"],
     "host": "api",
     "basePath": "/v1",
@@ -22,32 +69,45 @@
         "description": "End customers can book the halls depending upon the occasion"
     },
     "paths" : {
-        "/eventhalls" : {
-            "get" : {
-                "tags": "Event Hall",
-                "summary" : "Get all the Event Halls",
-                "description": "List all the event halls",
-                "produces": ["application/json"],
-                "parameters": [],
-                "responses": {
-                    "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/todosResponse"
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
-                    }
+        "/eventhall" : {
+        "get": {
+            "tags": [
+              "Event Hall"
+            ],
+            "summary": "",
+            "description": "",
+            "operationId": "setHall",
+            "consumes": [
+              "application/json"
+            ],
+            "produces": [
+              "application/json"
+            ],
+            "parameters": [
+                {
+                  "in": "body",
+                  "name": "body",
+                  "description": "Pet object that needs to be added to the store",
+                  "required": true,
+                  "schema": {
+                    "$ref": "#/schema/Halls"
+                  }
                 }
-            }
-        },
+            ],
+            "responses": {
+              "405": {
+                "description": "Invalid input"
+              }
+            },
+            "security": [
+              {
+                "petstore_auth": [
+                  "write:pets",
+                  "read:pets"
+                ]
+              }
+            ]
+        } },
         "/todo" : {
             "post" : {
                 "summary" : "Save the task",
