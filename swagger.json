@@ -87,7 +87,7 @@
                 {
                   "in": "body",
                   "name": "body",
-                  "description": "Pet object that needs to be added to the store",
+                  "description": "Event Hall that needs to be added to the hall owner",
                   "required": true,
                   "schema": {
                     "$ref": "#/schema/Halls"
@@ -95,18 +95,13 @@
                 }
             ],
             "responses": {
-              "405": {
-                "description": "Invalid input"
+              "400": {
+                "description": "This hall already exists"
+              },
+              "500" : {
+                "description": "Server error"
               }
-            },
-            "security": [
-              {
-                "petstore_auth": [
-                  "write:pets",
-                  "read:pets"
-                ]
-              }
-            ]
+            }
         } },
         "/todo" : {
             "post" : {
