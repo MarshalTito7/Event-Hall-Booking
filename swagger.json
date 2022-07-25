@@ -70,11 +70,11 @@
     },
     "paths" : {
         "/eventhall" : {
-        "get": {
+        "post": {
             "tags": [
               "Event Hall"
             ],
-            "summary": "",
+            "summary": "Add the event halls",
             "description": "",
             "operationId": "setHall",
             "consumes": [
