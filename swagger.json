@@ -81,6 +81,30 @@
                     "type" : "number"
                 }
             }  
+        },
+        "Booking" : {
+            "type": "object",
+            "properties" : {
+                "userName": {
+                    "type": "string"
+                },
+                "occasion": {
+                    "type": "string"
+                    
+                },
+                "startDate":{
+                    "type": "string",
+                    "enum": ["date"]
+                },
+                "endDate":{
+                    "type": "string",
+                    "enum": ["date"]
+                },
+                "hallId": {
+                    "type": "string"
+                    
+                }
+            }
         }
     },
     "schemes": ["http","https"],
@@ -192,15 +216,15 @@
                   "application/json"
                 ],
                 "responses": {
-                  "200": {
-                    "description": "successful operation",
-                    "schema": {
-                      "type": "object",
-                      "items": {
-                        "$ref": "#/schema/Halls"
-                      }
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/schema/Halls"
+                            }
+                        }
                     }
-                  }
     
                 }
             }
@@ -223,7 +247,7 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                            "$ref": "#/schema/Halls"
+                                "$ref": "#/schema/Halls"
                             }
                         }
                     }
@@ -270,28 +294,16 @@
                 }
             }
         },
-        "/todo" : {
-            "get" : {
-                "summary" : "Save the task",
-                "description": "Save the task",
-                "produces": ["application/json"],
-                "consumes": ["application/json"],
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "task object",
-                        "required": true,
-                        "schema": {
-                            "type": "object",
-                            "properties": {
-                                "task" : {
-                                    "type": "object",
-                                    "$ref": "#/definitions/Task"
-                                } 
-                            }
-                        }
-                    }
+        "/booking":{
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Finds the datails of all the bookings",
+                "description": "",
+                "operationId": "getBookings",
+                "produces": [
+                  "application/json"
                 ],
                 "responses": {
                     "200": {
@@ -299,18 +311,59 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/todosResponse"
+                                "$ref": "#/schema/Booking"
+                            }
+                        }
+                    }
+    
+                }
+            },
+            "post":{
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Create Bookings",
+                "description": "",
+                "operationId": "setBooking",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Booking made by the end customer",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/schema/Booking"
+                        }
+                    }
+                ],
+                "responses": {
+                    "1100": {
+                        "description": "This booking already exists"
+                    },
+                    "500" : {
+                        "description": "Server error"
+                    },
+                    "200" : {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/schema/Booking"
                             }
                         }
                     },
-                    "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
+                    "400":{
+                        "description": "The hall for the selected date is already booked"
                     }
                 }
             }
+
         },
         "/booking/{id}" : {
             "delete" : {
@@ -338,7 +391,80 @@
                         "description": "Booking cannot be deleted because the hall is not cancellable"
                     }
                 }
+            },
+            "put": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Update an existing booking",
+                "description": "",
+                "operationId": "updateBooking",
+                "consumes": [
+                  "application/json"
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID of the booking that needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Booking that needs to be updated to the customer",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/schema/Booking"
+                        }
+                    }
+                ],
+                "responses": {
+                  "400": {
+                    "description": "Booking cannot be updated because the hall for the selected date is already booked"
+                  },
+                  "200" : {
+                    "description": "successful operation"
+                  }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Bookings"
+                ],
+                "summary": "Finds the datails of a single booking",
+                "description": "works on the id of the entries",
+                "operationId": "getSingleBooking",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Booking id that needs to be searched",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/schema/Booking"
+                            }
+                        }
+                    }
+    
+                }
             }
+
         }
     }
 }
