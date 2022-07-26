@@ -57,6 +57,30 @@
                     "required": "[true, 'Please select an option']"
                 }
             }
+        },
+        "Location" : {
+            
+            "type": "object",
+            "properties" : {
+                "loc" : {
+                    "type" : "string",
+                    "enum": ["geoJSON point"],
+                    "coordinates" : [
+                        {
+                            "type" : "number"
+                        },
+                        {
+                            "type" : "number"
+                        }
+                    ]
+                },
+                "min" : {
+                    "type" : "number"
+                },
+                "max" : {
+                    "type" : "number"
+                }
+            }  
         }
     },
     "schemes": ["http","https"],
@@ -207,6 +231,45 @@
                 }
             }
         },
+        "/eventhall/search" : {
+            "get": {
+                "tags": [
+                    "Event Hall"
+                ],
+                "summary": "Finds the datails of all nearby event halls",
+                "description": "The customer has to input his location and the minimum distnce and maximum distnce for the search",
+                "operationId": "searchLoc",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Locaton of the customer",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/schema/Location"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                            "$ref": "#/schema/Halls"
+                            }
+                        }
+                    }
+    
+                }
+            }
+        },
         "/todo" : {
             "get" : {
                 "summary" : "Save the task",
@@ -249,83 +312,33 @@
                 }
             }
         },
-        "/todo/{id}" : {
+        "/booking/{id}" : {
             "delete" : {
-                "summary" : "Delete the task",
-                "description": "Delete the task",
+                "tags": [
+                    "Bookings"
+                ],
+                "summary" : "Cancel the booking",
+                "description": "",
                 "produces": ["application/json"],
+                "operationId": "cancelBooking",
                 "parameters": [
                     {
                         "name": "id",
                         "in": "path",
-                        "description": "task id that needs to be deleted",
+                        "description": "Booking id that needs to be cancelled",
                         "required": true,
                         "type": "string"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "successful operation",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/todosResponse"
-                            }
-                        }
+                        "description": "Booking successfully cancelled"
                     },
                     "400": {
-                        "description": "Invalid status value",
-                        "schema": {
-                            "$ref": "#/definitions/InvalidResponse"
-                        }
+                        "description": "Booking cannot be deleted because the hall is not cancellable"
                     }
                 }
             }
-        }
-    }, 
-    "definitions": {
-        "todosResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                     "type": "integer"
-                },
-                "task": {
-                    "type": "string"
-                },
-                "assignee": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "Task": {
-            "type": "object",
-            "properties": {
-                "task": {
-                    "type": "string"
-                },
-                "assignee": {
-                    "type": "string"
-                },
-                "status": {
-                    "type": "string"
-                }
-            }
-        },
-        "InvalidResponse": {
-            "type": "object",
-            "properties": {
-                "statusCode": {
-                    "type": "string"
-                },
-                "message": {
-                    "type": "string"
-                }
-            }
-
         }
     }
 }
