@@ -107,7 +107,7 @@
                 }
             } 
         },
-        "/eventhall/:id" : {
+        "/eventhall/{id}" : {
             "put": {
                 "tags": [
                   "Event Hall"
@@ -122,15 +122,22 @@
                   "application/json"
                 ],
                 "parameters": [
-                  {
-                    "in": "body",
-                    "name": "body",
-                    "description": "Event Hall that needs to be updated to the hall owner",
-                    "required": true,
-                    "schema": {
-                      "$ref": "#/schema/Halls"
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event hall id that needs to be updated",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "Event Hall that needs to be updated to the hall owner",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/schema/Halls"
+                        }
                     }
-                  }
                 ],
                 "responses": {
                   "400": {
@@ -139,6 +146,38 @@
                   "200" : {
                     "description": "successful operation"
                   }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Event Hall"
+                ],
+                "summary": "Finds the datails of a single event hall",
+                "description": "works on the id of the entries",
+                "operationId": "getSingleHalls",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Event hall id that needs to be searched",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                  "200": {
+                    "description": "successful operation",
+                    "schema": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/schema/Halls"
+                      }
+                    }
+                  }
+    
                 }
             }
 
