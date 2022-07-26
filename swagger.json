@@ -171,7 +171,7 @@
                   "200": {
                     "description": "successful operation",
                     "schema": {
-                      "type": "array",
+                      "type": "object",
                       "items": {
                         "$ref": "#/schema/Halls"
                       }
@@ -181,6 +181,31 @@
                 }
             }
 
+        },
+        "/eventhalls" : {
+            "get": {
+                "tags": [
+                    "Event Hall"
+                ],
+                "summary": "Finds the datails of all event halls",
+                "description": "",
+                "operationId": "getHalls",
+                "produces": [
+                  "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                            "$ref": "#/schema/Halls"
+                            }
+                        }
+                    }
+    
+                }
+            }
         },
         "/todo" : {
             "get" : {
