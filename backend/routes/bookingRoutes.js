@@ -8,8 +8,10 @@ const{
     cancelBooking
 } = require('../controller/bookingController')
 
-router.route('/booking').post(setBooking).get(getBookings)
+const {protect} = require('../middleware/authMiddleware')
 
-router.route('/booking/:id').put(updateBooking).get(getSingleBooking).delete(cancelBooking)
+router.route('/booking').post(protect, setBooking).get(protect, getBookings)
+
+router.route('/booking/:id').put(protect, updateBooking).get(protect, getSingleBooking).delete(protect, cancelBooking)
 
 module.exports = router
