@@ -1,6 +1,13 @@
 const mongoose = require('mongoose')
 
 const bookingSchema = new mongoose.Schema({
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        // We are saying that we want the user to be an objectID
+        required: true,
+        ref: 'User'
+        // We need to mention which mo
+    },
     userName: {
         type: String,
         required: [true, 'Please add your name ']

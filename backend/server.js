@@ -19,6 +19,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use('/api/v1', require('./routes/hallRoutes'))
 app.use('/api/v1', require('./routes/bookingRoutes'))
+app.use('/api/v1/users', require('./routes/userRoutes'))
 
 app.use(errorHandler)
 
