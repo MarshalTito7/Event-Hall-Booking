@@ -4,7 +4,7 @@ const btoa = require('btoa')
 const { ISSUER, TEST_CLIENT_ID, TEST_CLIENT_SECRET, DEFAULT_SCOPE } = process.env
 
 const test = async () => {
-  const token = btoa(`0oa64oe0q6UzHfEnJ5d7:fAk_hmtFY1GJDLEOT0OV_KJ-oGMLIW3qmENcpk8A`)
+  const token = btoa(`${TEST_CLIENT_ID}:${TEST_CLIENT_SECRET}`)
   try {
     const { token_type, access_token } = await request({
       uri: `https://dev-19137776.okta.com/oauth2/aus64oa59qaMt00H45d7/v1/token`,
