@@ -2,6 +2,13 @@ const mongoose = require('mongoose')
 const geocoder = require('../utils/geocoder');
 
 const hallSchema = new mongoose.Schema({
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        // We are saying that we want the user to be an objectID
+        required: true,
+        ref: 'User'
+        // We need to mention which mo
+    },
     hallId: {
         type: String,
         required: [true, 'Please add a store ID'],
